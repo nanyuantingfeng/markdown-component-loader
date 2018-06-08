@@ -102,7 +102,7 @@ export default (source, config) => {
   );
 
   const markdownSansAssignments = assignmentExpressionCache.load(markdownSansJsxProperties);
-
+  let markdownExamples = [];
   // Configure Markdown renderer, highlight code snippets, and post-process
   let renderer = new MarkdownIt()
     .configure('commonmark')
