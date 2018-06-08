@@ -1,6 +1,6 @@
 {
-  "name": "markdown-component-loader",
-  "version": "1.1.0",
+  "name": "markdown-rc-loader",
+  "version": "1.1.0-beta.0",
   "description": "Turn Markdown into dynamic, stateless React components",
   "main": "lib/index.js",
   "scripts": {
@@ -20,12 +20,12 @@
     "react",
     "jsx"
   ],
-  "homepage": "https://github.com/ticky/markdown-component-loader",
+  "homepage": "https://github.com/nanyuantingfeng/markdown-rc-loader",
   "bugs": {
-    "url": "https://github.com/ticky/markdown-component-loader/issues"
+    "url": "https://github.com/nanyuantingfeng/markdown-rc-loader/issues"
   },
-  "repository": "https://github.com/ticky/markdown-component-loader.git",
-  "author": "Jessica Stokes <hello@jessicastokes.net>",
+  "repository": "https://github.com/nanyuantingfeng/markdown-rc-loader.git",
+  "author": "nanyuantingfeng <nanyuantingfeng@aliyun.com>",
   "license": "MIT",
   "dependencies": {
     "any-base": "^1.0.0",

@@ -8,6 +8,27 @@ const formatCollection = (formatter, collection = {}) => (
   ).join('')
 );
 
+const formatScopes = (imports) => {
+  if (!imports) {
+    return '{}';
+  }
+
+  const keys = Object.keys(imports);
+
+  const nn = keys.map(key => {
+    key = key.trim();
+
+    if (key.charAt(0) === '{' && key.charAt(key.length - 1) === '}') {
+      key = key.slice(1, -1);
+      return key.split(',').map(kk => `${kk} : ${kk}`).join(',');
+    }
+
+    return `${key} : ${key}`;
+  }).join(',');
+
+  return `{${nn}}`;
+};
+
 export default (imports, statics, jsxContent, { passElementProps }) => {
   let moduleText = DocChomp`
     // Module generated from Markdown by Markdown Component Loader v${__VERSION__}
@@ -29,6 +50,9 @@ export default (imports, statics, jsxContent, { passElementProps }) => {
     
     };
     ${formatCollection(formatStatic, statics)}
+    
+    MarkdownComponent.exampleScope=${formatScopes(imports)}
+    
     function MarkdownComponent(props) {
       const { className, style${passElementProps ? ', elementProps' : ''} } = props;
 

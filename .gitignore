@@ -5,3 +5,6 @@ stats.json
 
 # `lib` is not included in git repo
 lib
+/package-lock.json
+.idea/
+src/__snapshots__/convert.spec.js.snap

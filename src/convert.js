@@ -1,7 +1,7 @@
 import frontMatter from 'front-matter';
 import walkHtml from 'hastml';
 import { decode as decodeEntities } from 'he';
-import HighlightJS from 'highlight.js';
+import catchLanguageCode from './catch-language-code';
 import MarkdownIt from './jsx-friendly-markdown-it';
 
 import formatModule from './formatters/module';
@@ -17,6 +17,8 @@ const ASSIGNMENT_EXPRESSION_REGEXP = (
 const ASSIGNMENT_EXPRESSION_COMMENT_REGEXP = (
   `{/\\*(${ASSIGNMENT_EXPRESSION_REGEXP})\\*/}`
 );
+
+const ASSIGNMENT_EXPRESSION_REGEXP_INSTANCE = new RegExp(ASSIGNMENT_EXPRESSION_REGEXP, 'g');
 
 const IMPLICIT_REACT_IMPORTS = {
   React: 'react',
@@ -110,26 +112,7 @@ export default (source, config) => {
       breaks: true,
       typographer: config.typographer,
       highlight(code, languageHint) {
-        let highlightedContent;
-
-        HighlightJS.configure({ tabReplace: '  ' });
-
-        // Try highlighting with a given hint
-        if (languageHint && HighlightJS.getLanguage(languageHint)) {
-          try {
-            highlightedContent = HighlightJS.highlight(languageHint, code).value;
-          } catch (err) {} // eslint-disable-line no-empty
-        }
-
-        // Highlight without a hint
-        if (!highlightedContent) {
-          try {
-            highlightedContent = HighlightJS.highlightAuto(code).value;
-          } catch (err) {} // eslint-disable-line no-empty
-        }
-
-        return highlightedContent
-          .replace(/\n/g, '<br />');
+        return catchLanguageCode(code, languageHint, markdownExamples, config.language);
       }
     });
 
@@ -154,9 +137,13 @@ export default (source, config) => {
   const html = (
     renderer.render(markdownSansAssignments) || '<!-- no input given -->'
   ).replace(
-    new RegExp(ASSIGNMENT_EXPRESSION_REGEXP, 'g'),
+    ASSIGNMENT_EXPRESSION_REGEXP_INSTANCE,
     '<!--$&-->'
   );
+
+  markdownExamples = markdownExamples
+    .map(code => code.replace(ASSIGNMENT_EXPRESSION_REGEXP_INSTANCE, ''))
+    .map(code => assignmentExpressionCache.unload(code));
 
   // Collect all the HTML tags and their positions
   const htmlOffsets = [0];
@@ -232,6 +219,8 @@ export default (source, config) => {
 
   // Unload caches so we've got our values back!
   jsx = jsxPropertyCache.unload(assignmentExpressionCache.unload(jsx));
+
+  statics.exampleCodes = markdownExamples;
 
   return formatModule(
     imports,
