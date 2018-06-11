@@ -20,11 +20,6 @@
     "react",
     "jsx"
   ],
-  "homepage": "https://github.com/nanyuantingfeng/markdown-rc-loader",
-  "bugs": {
-    "url": "https://github.com/nanyuantingfeng/markdown-rc-loader/issues"
-  },
-  "repository": "https://github.com/nanyuantingfeng/markdown-rc-loader.git",
   "author": "nanyuantingfeng <nanyuantingfeng@aliyun.com>",
   "license": "MIT",
   "dependencies": {
@@ -90,5 +85,17 @@
       "/node_modules/",
       "/__fixtures__/"
     ]
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nanyuantingfeng/markdown-rc-loader.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nanyuantingfeng/markdown-rc-loader/issues"
+  },
+  "homepage": "https://github.com/nanyuantingfeng/markdown-rc-loader#readme"
 }
