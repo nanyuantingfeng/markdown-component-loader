@@ -28,7 +28,9 @@ var NODE_TYPE = {
 
 var ATTRIBUTE_MAPPING = {
   'for': 'htmlFor',
-  'class': 'className'
+  'class': 'className',
+  'classname': 'className',
+  'className': 'className'
 };
 
 var ELEMENT_ATTRIBUTE_MAPPING = {
@@ -154,11 +156,12 @@ function eachObj(obj, iteratee, context) {
 // Populate property map with ReactJS's attribute and property mappings
 // TODO handle/use .Properties value eg: MUST_USE_PROPERTY is not HTML attr
 function mappingAttributesFromReactConfig(config) {
-  eachObj(config.Properties, function (propname) {
+  eachObj(config.Properties, function(propname) {
     var mapFrom = config.DOMAttributeNames[propname] || propname.toLowerCase();
 
-    if (!ATTRIBUTE_MAPPING[mapFrom])
+    if (!ATTRIBUTE_MAPPING[mapFrom]) {
       ATTRIBUTE_MAPPING[mapFrom] = propname;
+    }
   });
 }
 
@@ -236,7 +239,7 @@ function trimEnd(haystack, needle) {
  * Convert a hyphenated string to camelCase.
  */
 function hyphenToCamelCase(string) {
-  return string.replace(/-(.)/g, function (match, chr) {
+  return string.replace(/-(.)/g, function(match, chr) {
     return chr.toUpperCase();
   });
 }
@@ -271,7 +274,7 @@ function isNumeric(input) {
 // Node.js-like environment, use jsdom.
 var window = jsdom().defaultView;
 
-var createElement = function (tag) {
+var createElement = function(tag) {
   return window.document.createElement(tag);
 };
 
@@ -291,7 +294,7 @@ function escapeSpecialChars(value) {
   return tempEl.innerHTML;
 }
 
-var HTMLtoJSX = function (config) {
+var HTMLtoJSX = function(config) {
   this.config = config || {};
   if (!this.config.indent) {
     this.config.indent = '  ';
@@ -302,7 +305,7 @@ HTMLtoJSX.prototype = {
   /**
    * Reset the internal state of the converter
    */
-  reset: function () {
+  reset: function() {
     this.output = '';
     this.level = 0;
     this._inPreTag = false;
@@ -313,7 +316,7 @@ HTMLtoJSX.prototype = {
    * @param {string} html HTML to convert
    * @return {string} JSX
    */
-  convert: function (html) {
+  convert: function(html) {
     this.reset();
 
     var containerEl = createElement('div');
@@ -343,7 +346,7 @@ HTMLtoJSX.prototype = {
    * @param {string} html HTML to clean
    * @return {string} Cleaned HTML
    */
-  _cleanInput: function (html) {
+  _cleanInput: function(html) {
     // Remove unnecessary whitespace
     html = html.trim();
     // Ugly method to strip script tags. They can wreak havoc on the DOM nodes
@@ -359,7 +362,7 @@ HTMLtoJSX.prototype = {
    * @param {DOMElement} containerEl Container element
    * @return {boolean}
    */
-  _onlyOneTopLevel: function (containerEl) {
+  _onlyOneTopLevel: function(containerEl) {
     // Only a single child element
     if (
       containerEl.childNodes.length === 1
@@ -393,7 +396,7 @@ HTMLtoJSX.prototype = {
    *
    * @return {string}
    */
-  _getIndentedNewline: function () {
+  _getIndentedNewline: function() {
     return '\n' + repeatString(this.config.indent, this.level + 2);
   },
 
@@ -402,7 +405,7 @@ HTMLtoJSX.prototype = {
    *
    * @param {Node} node
    */
-  _visit: function (node) {
+  _visit: function(node) {
     this._beginVisit(node);
     this._traverse(node);
     this._endVisit(node);
@@ -413,7 +416,7 @@ HTMLtoJSX.prototype = {
    *
    * @param {Node} node
    */
-  _traverse: function (node) {
+  _traverse: function(node) {
     this.level++;
     for (var i = 0, count = node.childNodes.length; i < count; i++) {
       this._visit(node.childNodes[i]);
@@ -426,7 +429,7 @@ HTMLtoJSX.prototype = {
    *
    * @param {Node} node
    */
-  _beginVisit: function (node) {
+  _beginVisit: function(node) {
     switch (node.nodeType) {
       case NODE_TYPE.ELEMENT:
         this._beginVisitElement(node);
@@ -450,7 +453,7 @@ HTMLtoJSX.prototype = {
    *
    * @param {Node} node
    */
-  _endVisit: function (node) {
+  _endVisit: function(node) {
     switch (node.nodeType) {
       case NODE_TYPE.ELEMENT:
         this._endVisitElement(node);
@@ -466,7 +469,7 @@ HTMLtoJSX.prototype = {
    * Handles pre-visit behaviour for the specified element node
    * @param {DOMElement} node
    */
-  _beginVisitElement: function (node) {
+  _beginVisitElement: function(node) {
     var tagName = jsxTagName(node.tagName);
     var attributes = [];
     for (var i = 0, count = node.attributes.length; i < count; i++) {
@@ -499,7 +502,7 @@ HTMLtoJSX.prototype = {
    *
    * @param {Node} node
    */
-  _endVisitElement: function (node) {
+  _endVisitElement: function(node) {
     var tagName = jsxTagName(node.tagName);
     // De-indent a bit
     // TODO: It's inefficient to do it this way :/
@@ -522,7 +525,7 @@ HTMLtoJSX.prototype = {
    * @param {Node} node
    * @return {boolean}
    */
-  _isSelfClosing: function (node) {
+  _isSelfClosing: function(node) {
     var tagName = jsxTagName(node.tagName);
     // If it has children, it's not self-closing
     // Exception: All children of a textarea are moved to a "defaultValue" attribute, style attributes are dangerously set.
@@ -534,7 +537,7 @@ HTMLtoJSX.prototype = {
    *
    * @param {TextNode} node
    */
-  _visitText: function (node) {
+  _visitText: function(node) {
     var parentTag = node.parentNode && jsxTagName(node.parentNode.tagName);
     if (parentTag === 'textarea' || parentTag === 'style') {
       // Ignore text content of textareas and styles, as it will have already been moved
@@ -550,13 +553,13 @@ HTMLtoJSX.prototype = {
       // wrapping newlines and sequences of two or more spaces in variables.
       text = text
         .replace(/\r/g, '')
-        .replace(/( {2,}|\n|\t|\{|\})/g, function (whitespace) {
+        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
           return '{' + JSON.stringify(whitespace) + '}';
         });
     } else {
       // Handle any curly braces.
       text = text
-        .replace(/(\{|\})/g, function (brace) {
+        .replace(/(\{|\})/g, function(brace) {
           return '{\'' + brace + '\'}';
         });
       // If there's a newline in the text, adjust the indent level
@@ -572,7 +575,7 @@ HTMLtoJSX.prototype = {
    *
    * @param {Text} node
    */
-  _visitComment: function (node) {
+  _visitComment: function(node) {
     this.output += '{/*' + node.textContent.replace('*/', '* /') + '*/}';
   },
 
@@ -583,7 +586,7 @@ HTMLtoJSX.prototype = {
    * @param {object}     attribute
    * @return {string}
    */
-  _getElementAttribute: function (node, attribute) {
+  _getElementAttribute: function(node, attribute) {
     switch (attribute.name) {
       case 'style':
         return this._getStyleAttribute(attribute.value);
@@ -612,7 +615,7 @@ HTMLtoJSX.prototype = {
    * @param {string} styles
    * @return {string}
    */
-  _getStyleAttribute: function (styles) {
+  _getStyleAttribute: function(styles) {
     var jsxStyles = new StyleParser(styles).toJSXString();
     return 'style={{' + jsxStyles + '}}';
   },
@@ -625,7 +628,7 @@ HTMLtoJSX.prototype = {
    * @param {string} indent Configured indention
    * @return {string} JSX output wihtout class-level indention
    */
-  _removeJSXClassIndention: function (output, indent) {
+  _removeJSXClassIndention: function(output, indent) {
     var classIndention = new RegExp('\\n' + indent + indent + indent, 'g');
     return output.replace(classIndention, '\n');
   }
@@ -637,7 +640,7 @@ HTMLtoJSX.prototype = {
  * @param {string} rawStyle Raw style attribute
  * @constructor
  */
-var StyleParser = function (rawStyle) {
+var StyleParser = function(rawStyle) {
   this.parse(rawStyle);
 };
 
@@ -646,9 +649,9 @@ StyleParser.prototype = {
    * Parse the specified inline style attribute value
    * @param {string} rawStyle Raw style attribute
    */
-  parse: function (rawStyle) {
+  parse: function(rawStyle) {
     this.styles = {};
-    rawStyle.split(';').forEach(function (style) {
+    rawStyle.split(';').forEach(function(style) {
       style = style.trim();
       var firstColon = style.indexOf(':');
       var key = style.substr(0, firstColon);
@@ -667,9 +670,9 @@ StyleParser.prototype = {
    *
    * @return {string}
    */
-  toJSXString: function () {
+  toJSXString: function() {
     var output = [];
-    eachObj(this.styles, function (key, value) {
+    eachObj(this.styles, function(key, value) {
       output.push(this.toJSXKey(key) + ': ' + this.toJSXValue(value));
     }, this);
     return output.join(', ');
@@ -681,7 +684,7 @@ StyleParser.prototype = {
    * @param {string} key CSS style key
    * @return {string} JSX style key
    */
-  toJSXKey: function (key) {
+  toJSXKey: function(key) {
     // Don't capitalize -ms- prefix
     if (/^-ms-/.test(key)) {
       key = key.substr(1);
@@ -695,7 +698,7 @@ StyleParser.prototype = {
    * @param {string} value CSS style value
    * @return {string} JSX style value
    */
-  toJSXValue: function (value) {
+  toJSXValue: function(value) {
     if (isNumeric(value)) {
       // If numeric, no quotes
       return value;
