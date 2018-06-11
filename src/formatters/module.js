@@ -1,6 +1,9 @@
 import DocChomp from 'doc-chomp';
 import formatImport from './import';
 import formatStatic from './static';
+import HTML2JSX from '../html2jsx/HTMLtoJSX';
+
+const html2JSX = new HTML2JSX();
 
 const formatCollection = (formatter, collection = {}) => (
   Object.keys(collection).map(
@@ -30,6 +33,9 @@ const formatScopes = (imports) => {
 };
 
 export default (imports, statics, jsxContent, { passElementProps }) => {
+
+  jsxContent = html2JSX.convert(jsxContent);
+
   let moduleText = DocChomp`
     // Module generated from Markdown by Markdown Component Loader v${__VERSION__}
     ${formatCollection(formatImport, imports)}

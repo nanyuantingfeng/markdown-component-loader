@@ -6,7 +6,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const isDevServer = process.argv.find((arg) => arg.includes('webpack-dev-server'));
 
-const devtool = isDevServer ? "cheap-module-eval-source-map" : "source-map";
+const devtool = isDevServer ? 'cheap-module-eval-source-map' : 'source-map';
 
 module.exports = {
   devtool,
@@ -21,13 +21,13 @@ module.exports = {
     ]
   },
   output: {
-    path: path.join(__dirname, "docs"),
-    filename: "[name].js"
+    path: path.join(__dirname, 'docs'),
+    filename: '[name].js'
   },
   devServer: {
     inline: true,
-    contentBase: "./docs",
-    host: "0.0.0.0"
+    contentBase: './docs',
+    host: '0.0.0.0'
   },
   module: {
     rules: [
@@ -41,7 +41,7 @@ module.exports = {
         use: [
           'babel-loader',
           {
-            loader: path.join(__dirname, "lib/index.js"),
+            loader: path.join(__dirname, 'lib/index.js'),
             options: {
               markdownItPlugins: [
                 [
@@ -72,7 +72,8 @@ module.exports = {
           ]
         })
       },
-      { test: /\.(jpe?g|png|gif|svg)$/i,
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
           {
             loader: 'file-loader',
@@ -94,10 +95,18 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
-      name: "shared",
-      filename: "shared.js"
+      name: 'shared',
+      filename: 'shared.js'
     }),
     new UglifyJSPlugin({ sourceMap: true }),
-    new ExtractTextPlugin("[name].css")
-  ]
+    new ExtractTextPlugin('[name].css')
+  ],
+
+  node: {
+    console: true,
+    fs: 'empty',
+    net: 'empty',
+    child_process: 'empty',
+    url: true
+  }
 };

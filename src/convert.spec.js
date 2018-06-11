@@ -10,6 +10,7 @@ import path from 'path';
 import { readFileSync } from 'fs';
 
 import MARKDOWN_COMPONENT_FIXTURES from './__fixtures__/components';
+
 const BOOL_FIXTURES = [undefined, true, false];
 
 jest.mock('foo');
@@ -71,7 +72,7 @@ const RUN_ONE_FIXTURE = (component, configuration) => {
       return acc;
     }, {})).toMatchSnapshot();
 
-    const tree = renderer.create(<Component />);
+    const tree = renderer.create(<Component/>);
 
     expect(tree.toJSON()).toMatchSnapshot();
   });
@@ -90,16 +91,16 @@ const RUN_FIXTURES_WITH_CONFIG = (config) => (() => {
 
 const PLUGIN_FIXTURES = [
   undefined,          // test for default fallback
-  "somenonsensevalue" // test resilience
+  'somenonsensevalue' // test resilience
 ];
 
 PLUGIN_FIXTURES.push([
-  require("markdown-it-anchor")
+  require('markdown-it-anchor')
 ]);
 
 PLUGIN_FIXTURES.push([
-  require("markdown-it-anchor"),
-  [require("markdown-it-table-of-contents"), { containerClass: 'my-container-class' }]
+  require('markdown-it-anchor'),
+  [require('markdown-it-table-of-contents'), { containerClass: 'my-container-class' }]
 ]);
 
 // And now, the party can start!
@@ -228,9 +229,11 @@ describe('convert', () => {
       ),
       {
         markdownItPlugins: [
-          path.relative(__dirname, require.resolve("markdown-it-anchor"))
+          path.relative(__dirname, require.resolve('markdown-it-anchor'))
         ]
       }
     );
   });
 });
+
+

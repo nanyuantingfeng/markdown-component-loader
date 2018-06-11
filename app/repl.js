@@ -32,6 +32,18 @@ const DEFAULT_CONTENT = DocChomp`
   You can interpolate strings and React elements here; <code>{{ window.navigator.userAgent }}</code>!
 
   More information about Markdown Component Loader is avaiable [on GitHub](https://github.com/ticky/markdown-component-loader)
+  
+  
+  
+  
+| Option | Description |
+| ------:| -----------:|
+| data   | path to data files to supply the data that will be passed into templates. |
+| engine | engine to be used for processing templates. Handlebars is the default. |
+| ext    | extension to be used for dest files. |
+| x xxx  | adx----->xxx|
+
+
 `;
 
 const COMMON_CODEMIRROR_OPTIONS = {
@@ -61,8 +73,10 @@ class REPL extends React.Component {
     return (
       <div className="repl">
         <div className="header">
-          <img id="logo" src={require('./images/logo.svg')} alt="Markdown Component Loader" />
-          <a className="bubble-link blue-bubble" href="index.html">Learn more</a>
+          <img id="logo" src={require('./images/logo.svg')}
+               alt="Markdown Component Loader"/>
+          <a className="bubble-link blue-bubble" href="index.html">Learn
+            more</a>
         </div>
         <div className="repl-editors">
           <Codemirror
@@ -122,7 +136,7 @@ class REPL extends React.Component {
 }
 
 ReactDOM.render(
-  <REPL />,
+  <REPL/>,
   document.getElementById('root')
 );
 

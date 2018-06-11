@@ -105,7 +105,7 @@ export default (source, config) => {
   let markdownExamples = [];
   // Configure Markdown renderer, highlight code snippets, and post-process
   let renderer = new MarkdownIt()
-    .configure('commonmark')
+  //.configure('commonmark')
     .enable(['smartquotes'])
     .set({
       // We need explicit line breaks

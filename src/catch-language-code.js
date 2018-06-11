@@ -25,7 +25,7 @@ export default function catchLanguageCode(code, language, cache, language2 = 'js
       highlightedContent = HighlightJS.highlightAuto(code).value;
     } catch (err) {}
   }
-  return highlightedContent
-    .replace(/\n/g, '<br />');
+
+  return highlightedContent.replace(/\n/g, '<br />');
 }
 
