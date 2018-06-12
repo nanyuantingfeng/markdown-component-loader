@@ -23,9 +23,7 @@ describe('Webpack loader', () => {
         {},
         FAKE_WEBPACK_CONTEXT,
         {
-          query: {
-
-          }
+          query: {}
         }
       ),
       DocChomp`

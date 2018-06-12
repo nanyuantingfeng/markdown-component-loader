@@ -1,6 +1,6 @@
 {
   "name": "markdown-rc-loader",
-  "version": "1.1.0-beta.3",
+  "version": "1.1.0-beta.4",
   "description": "Turn Markdown into dynamic, stateless React components",
   "main": "lib/index.js",
   "scripts": {
@@ -26,13 +26,11 @@
     "any-base": "^1.0.0",
     "doc-chomp": "1.1.0",
     "front-matter": "^2.1.0",
-    "hastml": "^0.1.0",
-    "he": "^1.1.1",
     "highlight.js": "^9.6.0",
-    "jsdom-no-contextify": "^3.1.0",
     "jsesc": "^2.2.0",
     "loader-utils": "^1.1.0",
     "markdown-it": "^8.1.0",
+    "parse5": "^5.0.0",
     "sha.js": "^2.4.5"
   },
   "devDependencies": {
